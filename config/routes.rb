@@ -5,6 +5,6 @@ Rails.application.routes.draw do
   namespace :api do
     resources :get_tasks, only: [:create]
     resources :complete_tasks, only: [:create]
-    resources :oauth_tokens, only: [:create]
+    resources :oauth_tokens, only: [:index]
   end
 end

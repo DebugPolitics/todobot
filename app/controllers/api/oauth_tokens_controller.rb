@@ -1,7 +1,7 @@
 class Api::OauthTokensController < Api::ApiController
   skip_before_filter :verify_slack_token!
 
-  def create
+  def index
     code = params[:code]
     Rails.logger.info "OAuth Exchange Code = #{code}"
 
