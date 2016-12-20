@@ -1,4 +1,4 @@
-class Api::GetTasksController < Api::ApiController
+class Api::OauthTokensController < Api::ApiController
   skip_filter :verify_slack_token!
 
   def create
