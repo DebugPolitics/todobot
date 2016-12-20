@@ -7,10 +7,10 @@ class Api::GetTasksController < Api::ApiController
     task = user.get_random_task
 
     if task.nil?
-      render json: slack_message_from_task(task),
+      render json: { text: 'There are no more tasks for you! Please try again later' },
              status: :ok
     else
-      render json: { text: task.description, status: :ok }
+      render json: { text: slack_message_from_task(task), status: :ok }
     end
   end
 
