@@ -10,9 +10,35 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 20161220024001) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "task_completions", force: :cascade do |t|
+    t.integer  "user_id",    null: false
+    t.integer  "task_id",    null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["task_id"], name: "index_task_completions_on_task_id", using: :btree
+    t.index ["user_id"], name: "index_task_completions_on_user_id", using: :btree
+  end
+
+  create_table "tasks", force: :cascade do |t|
+    t.text     "description",                  null: false
+    t.boolean  "is_multi_use", default: false, null: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string   "name",       null: false
+    t.string   "slack_id",   null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["slack_id"], name: "index_users_on_slack_id", unique: true, using: :btree
+  end
+
+  add_foreign_key "task_completions", "tasks", on_delete: :cascade
+  add_foreign_key "task_completions", "users", on_delete: :cascade
 end
