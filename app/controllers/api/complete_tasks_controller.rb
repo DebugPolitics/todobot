@@ -8,6 +8,9 @@ class Api::CompleteTasksController < Api::ApiController
       render json: error_response, status: :ok
     else
       user.tasks << task
+      user_name = parsed_payload['user']['name']
+      public_message = "@#{user_name} has just finished a task: #{task.description}"
+      post_message_to_task_channel public_message
       render json: success_response, status: :ok
     end
   end
@@ -25,5 +28,12 @@ class Api::CompleteTasksController < Api::ApiController
 
   def success_response
     base_response("Thanks for completing the task!")
+  end
+
+  def post_message_to_task_channel(msg)
+    HTTParty.post('https://slack.com/api/chat.postMessage',
+                  body: { token: SLACK_AUTH_TOKEN,
+                          channel: SLACK_TASKS_CHANNEL_ID,
+                          text: msg }).parsed_response
   end
 end
