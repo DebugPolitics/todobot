@@ -27,8 +27,11 @@ ActiveRecord::Schema.define(version: 20161220024001) do
   create_table "tasks", force: :cascade do |t|
     t.text     "description",                  null: false
     t.boolean  "is_multi_use", default: false, null: false
+    t.boolean  "has_expired",  default: true,  null: false
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
+    t.index ["has_expired"], name: "index_tasks_on_has_expired", using: :btree
+    t.index ["is_multi_use"], name: "index_tasks_on_is_multi_use", using: :btree
   end
 
   create_table "users", force: :cascade do |t|
