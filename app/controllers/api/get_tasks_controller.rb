@@ -10,7 +10,8 @@ class Api::GetTasksController < Api::ApiController
       render json: { text: 'There are no more tasks for you! Please try again later' },
              status: :ok
     else
-      render json: { text: slack_message_from_task(task), status: :ok }
+      render json: slack_message_from_task(task),
+             status: :ok
     end
   end
 
