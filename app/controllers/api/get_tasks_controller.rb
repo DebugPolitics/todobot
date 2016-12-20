@@ -29,7 +29,7 @@ class Api::GetTasksController < Api::ApiController
           "actions": [
             {
               "name": "complete",
-              "text": "Complete",
+              "text": "Mark as Done",
               "type": "button",
               "value": task.id,
               "style": "primary"
