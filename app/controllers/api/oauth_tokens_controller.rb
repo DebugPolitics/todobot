@@ -1,5 +1,5 @@
 class Api::OauthTokensController < Api::ApiController
-  skip_filter :verify_slack_token!
+  skip_before_filter :verify_slack_token!
 
   def create
     code = params[:code]
