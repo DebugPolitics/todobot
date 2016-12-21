@@ -28,7 +28,7 @@ class Api::CompleteTasksController < Api::ApiController
   end
 
   def success_response
-    base_response(@task.description.split.map { |s| "~#{s}~" }.join("\n"))
+    base_response(@task.description.split("\n").map { |s| "~#{s}~" }.join("\n"))
   end
 
   def announce_task_completion(msg)
