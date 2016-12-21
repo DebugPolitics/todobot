@@ -2,15 +2,15 @@ class Api::CompleteTasksController < Api::ApiController
   def create
     parsed_payload = JSON.parse(params[:payload])
     user = User.find_by_slack_id(parsed_payload['user']['id'])
-    task = Task.find_by_id(parsed_payload['actions'].first['value'])
+    @task = Task.find_by_id(parsed_payload['actions'].first['value'])
 
-    if user.nil? or task.nil?
+    if user.nil? || @task.nil?
       render json: error_response, status: :ok
     else
-      user.tasks << task
+      user.tasks << @task
       user_name = parsed_payload['user']['name']
       public_message = "*The fantastic @#{user_name} just completed his/her " +
-        "#{user.tasks.count.ordinalize} to-do:* 🎉\n#{task.description}"
+        "#{user.tasks.count.ordinalize} to-do:* 🎉\n#{@task.description}"
       announce_task_completion public_message
       render json: success_response, status: :ok
     end
@@ -28,7 +28,7 @@ class Api::CompleteTasksController < Api::ApiController
   end
 
   def success_response
-    base_response("Thanks for completing the task!")
+    base_response(@task.description.split.map { |s| "~#{s}~" }.join("\n"))
   end
 
   def announce_task_completion(msg)
