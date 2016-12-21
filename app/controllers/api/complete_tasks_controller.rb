@@ -9,7 +9,11 @@ class Api::CompleteTasksController < Api::ApiController
     else
       user.tasks << task
       user_name = parsed_payload['user']['name']
-      public_message = "*The fantastic @#{user_name} has just finished this todo:* 🎉 #{task.description}. *That’s 3 todos this week for #{user.name}!*"
+      public_message = <<-EOS.strip_heredoc
+        *The fantastic @#{user_name} has just finished this to-do:* 🎉
+        #{task.description}
+         *That’s #{user.tasks.count.pluralize('to-do')} _done_ for #{user.name}!*"
+      EOS
       announce_task_completion public_message
       render json: success_response, status: :ok
     end
