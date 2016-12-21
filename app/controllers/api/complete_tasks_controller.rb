@@ -28,7 +28,7 @@ class Api::CompleteTasksController < Api::ApiController
   end
 
   def success_response
-    base_response("#{✅} #{@task.description}")
+    base_response("✅ #{@task.description}")
   end
 
   def announce_task_completion(msg)
