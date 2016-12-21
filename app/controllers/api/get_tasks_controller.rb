@@ -18,7 +18,7 @@ class Api::GetTasksController < Api::ApiController
   private
   def slack_message_from_task task
     {
-      "text": ":+1: *New personal task created:*",
+      "text": ":+1: *🐣 Here’s a task for you to do...*",
       "attachments": [
         {
           "text": task.description,
