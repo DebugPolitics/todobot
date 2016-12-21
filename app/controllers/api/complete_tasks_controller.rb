@@ -12,7 +12,7 @@ class Api::CompleteTasksController < Api::ApiController
       public_message = <<-EOS.strip_heredoc
         *The fantastic @#{user_name} has just finished this to-do:* 🎉
         #{task.description}
-         *That’s #{user.tasks.count.pluralize('to-do')} _done_ for #{user.name}!*"
+         *That’s #{'to-do'.pluralize(user.tasks.count)} _done_ for #{user.name}!*"
       EOS
       announce_task_completion public_message
       render json: success_response, status: :ok
