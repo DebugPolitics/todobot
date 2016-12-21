@@ -9,9 +9,8 @@ class Api::CompleteTasksController < Api::ApiController
     else
       user.tasks << task
       user_name = parsed_payload['user']['name']
-      public_message = "*The fantastic @#{user_name} has just finished this " +
-        "to-do:* 🎉\n#{task.description}\n*That’s #{user.tasks.count} " +
-        "#{'to-do'.pluralize(user.tasks.count)} _done_ for #{user.name}!*"
+      public_message = "*The fantastic @#{user_name} just completed his/her " +
+        "#{user.tasks.count.ordinalize} to-do:* 🎉\n#{task.description}"
       announce_task_completion public_message
       render json: success_response, status: :ok
     end
