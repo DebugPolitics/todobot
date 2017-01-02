@@ -1,6 +1,6 @@
 class Api::ApiController < ApplicationController
   protect_from_forgery with: :null_session
-  before_filter :verify_slack_token!
+  before_action :verify_slack_token!
 
   protected
   def verify_slack_token!
