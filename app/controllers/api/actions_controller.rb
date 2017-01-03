@@ -33,6 +33,12 @@ class Api::ActionsController < Api::ApiController
         else
           respond_with_error
         end
+      when 'pass'
+        task = user.get_random_task
+        text = "Try this one on for size..."
+
+        reply = base_response(nil).merge(new_task_message(task, text: text))
+        render json: reply, status: :ok
       end
     end
   end

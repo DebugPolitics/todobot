@@ -74,24 +74,31 @@ class Api::ActionsControllerTest < ActionController::TestCase
   end
 
   test "POST to create passes on a task" do
-    assert_difference '@user.tasks.count' do
-      post :create, params: {
-        payload: {
-          token: SLACK_VERIFICATION_TOKEN,
-          callback_id: 'tasks',
-          actions: [
-            { name: 'complete', value: @task.id }
-          ],
-          user: {
-            id: @user.slack_id
-          }
-        }.to_json
-      }
-    end
+    new_task = Task.create description: 'new task'
+
+    User.any_instance.stubs(:get_random_task).returns(new_task)
+
+    post :create, params: {
+      payload: {
+        token: SLACK_VERIFICATION_TOKEN,
+        callback_id: 'tasks',
+        actions: [
+          { name: 'pass', value: @task.id }
+        ],
+        user: {
+          id: @user.slack_id
+        }
+      }.to_json
+    }
+
+    parsed_response = JSON.parse(response.body)
 
     assert_response :success
-    assert_equal "✅ *Nice job! You finished this to-do item:*\n#{@task.description}",
-      JSON.parse(response.body)['text']
+    assert_equal "Try this one on for size...", parsed_response['text']
+    assert_equal 1, parsed_response['attachments'].size
+    assert_equal 2, parsed_response['attachments'][0]['actions'].size
+    assert_equal %w[complete pass], parsed_response['attachments'][0]['actions'].map { |a| a['name'] }
+    assert_equal 0, @user.tasks.count
   end
 
 end
