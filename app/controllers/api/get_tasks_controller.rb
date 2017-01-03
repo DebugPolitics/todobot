@@ -23,7 +23,7 @@ class Api::GetTasksController < Api::ApiController
         {
           "text": task.description,
           "fallback": "You are unable to complete a task",
-          "callback_id": "complete_task",
+          "callback_id": "tasks",
           "color": "#D3D3D3",
           "attachment_type": "default",
           "actions": [
