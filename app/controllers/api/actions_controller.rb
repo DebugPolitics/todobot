@@ -24,7 +24,7 @@ class Api::ActionsController < Api::ApiController
 
           public_message = "*The fantastic @#{user.name} just completed his/her " +
             "#{user.tasks.count.ordinalize} to-do:* 🎉\n#{task.description}"
-          announce_task_completion public_message
+          send_message public_message
 
           confirmation_message = "✅ *Nice job! You finished this to-do " +
             "item:*\n#{task.description}"
@@ -48,13 +48,6 @@ class Api::ActionsController < Api::ApiController
   def respond_with_error
     error_response = base_response("Sorry, that didn't work. Please try again.")
     render json: error_response, status: :ok
-  end
-
-  def announce_task_completion(msg)
-    HTTParty.post('https://slack.com/api/chat.postMessage',
-                  body: { token: SLACK_AUTH_TOKEN,
-                          channel: SLACK_GENERAL_CHANNEL_ID,
-                          text: msg }).parsed_response
   end
 
 end

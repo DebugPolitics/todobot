@@ -19,4 +19,14 @@ class Api::ApiController < ApplicationController
       render json: { errors: "Invalid request" }, status: 401
     end
   end
+
+  def send_message(msg, channel = SLACK_GENERAL_CHANNEL_ID)
+    HTTParty.post('https://slack.com/api/chat.postMessage', {
+      body: {
+        token: SLACK_AUTH_TOKEN,
+        channel: channel,
+        text: msg
+      }
+    }).parsed_response
+  end
 end
