@@ -15,10 +15,10 @@ class Api::ActionsController < Api::ApiController
 
     case callback_id
     when 'tasks'
+      task = Task.find_by_id(action_value)
+
       case action_name
       when 'complete'
-        task = Task.find_by_id(action_value)
-
         if task.present?
           user.tasks << task
 
@@ -34,7 +34,7 @@ class Api::ActionsController < Api::ApiController
           respond_with_error
         end
       when 'pass'
-        task = user.get_random_task
+        task = user.get_random_task(exclude: task)
         text = "Try this one on for size..."
 
         reply = base_response(nil).merge(new_task_message(task, text: text))
