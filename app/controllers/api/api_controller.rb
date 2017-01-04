@@ -32,7 +32,9 @@ class Api::ApiController < ApplicationController
     }).parsed_response
   end
 
-  def new_task_message(task, text: "*🐣 Here’s a task for you to do...*")
+  def new_task_message(task, text: "🐣 Here’s a task for you to do...")
+    text = "#{text} (earn #{task.bounty} #{"point".pluralize(task.bounty)})"
+
     {
       "text": text,
       "attachments": [
