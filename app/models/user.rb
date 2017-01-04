@@ -4,10 +4,15 @@ class User < ApplicationRecord
   validates :name, presence: true
   validates :slack_id, presence: true, uniqueness: true
 
-  def get_random_task
-    already_completed_task_ids = self.tasks.where(is_multi_use: false).pluck(:id)
+  def get_random_task(exclude: nil)
+    excluded_task_ids = completed_tasks.pluck(:id)
+    excluded_task_ids << exclude.id if exclude.present?
     candidate_tasks = Task.where(has_expired: false)
-                          .where.not(id: already_completed_task_ids)
+                          .where.not(id: excluded_task_ids)
     candidate_tasks.sample
+  end
+
+  def completed_tasks
+    self.tasks.where(is_multi_use: false)
   end
 end
