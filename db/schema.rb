@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161220061736) do
+ActiveRecord::Schema.define(version: 20170104021122) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -61,6 +61,7 @@ ActiveRecord::Schema.define(version: 20161220061736) do
     t.boolean  "has_expired",  default: false, null: false
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
+    t.integer  "bounty",       default: 1
     t.index ["has_expired"], name: "index_tasks_on_has_expired", using: :btree
     t.index ["is_multi_use"], name: "index_tasks_on_is_multi_use", using: :btree
   end

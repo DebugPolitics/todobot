@@ -20,7 +20,7 @@ class Api::GetTasksControllerTest < ActionController::TestCase
     parsed_response = JSON.parse(response.body)
 
     assert_response :success
-    assert_equal "*🐣 Here’s a task for you to do...*", parsed_response['text']
+    assert_equal "🐣 Here’s a task for you to do... (earn 1 point)", parsed_response['text']
     assert_equal 1, parsed_response['attachments'].size
     assert_equal 2, parsed_response['attachments'][0]['actions'].size
     assert_equal @task.description, parsed_response['attachments'][0]['text']

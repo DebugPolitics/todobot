@@ -23,7 +23,9 @@ class Api::ActionsController < Api::ApiController
           user.tasks << task
 
           public_message = "*The fantastic @#{user.name} just completed his/her " +
-            "#{user.tasks.count.ordinalize} to-do:* 🎉\n#{task.description}"
+            "#{user.tasks.count.ordinalize} to-do and earned #{task.bounty} " +
+            "#{"point".pluralize(task.bounty)} for a total of " +
+            "#{user.tasks.sum(:bounty)}:* 🎉\n#{task.description}"
           send_message public_message
 
           confirmation_message = "✅ *Nice job! You finished this to-do " +
