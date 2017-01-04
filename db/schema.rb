@@ -61,7 +61,7 @@ ActiveRecord::Schema.define(version: 20170104021122) do
     t.boolean  "has_expired",  default: false, null: false
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
-    t.integer  "bounty"
+    t.integer  "bounty",       default: 1
     t.index ["has_expired"], name: "index_tasks_on_has_expired", using: :btree
     t.index ["is_multi_use"], name: "index_tasks_on_is_multi_use", using: :btree
   end
