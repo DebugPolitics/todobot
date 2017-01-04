@@ -48,7 +48,7 @@ class Api::ActionsControllerTest < ActionController::TestCase
         token: SLACK_AUTH_TOKEN,
         channel: SLACK_GENERAL_CHANNEL_ID,
         text: "*The fantastic @#{@user.name} just completed his/her " +
-          "1st to-do:* 🎉\n#{@task.description}"
+          "1st to-do and earned 1 point for a total of 1:* 🎉\n#{@task.description}"
       }
     }).returns(stubbed_response)
 
