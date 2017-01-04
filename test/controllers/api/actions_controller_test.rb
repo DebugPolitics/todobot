@@ -46,7 +46,7 @@ class Api::ActionsControllerTest < ActionController::TestCase
     HTTParty.expects(:post).with('https://slack.com/api/chat.postMessage', {
       body: {
         token: SLACK_AUTH_TOKEN,
-        channel: SLACK_GENERAL_CHANNEL_ID,
+        channel: SLACK_DONE_CHANNEL_ID,
         text: "*The fantastic @#{@user.name} just completed his/her " +
           "1st to-do:* 🎉\n#{@task.description}"
       }
