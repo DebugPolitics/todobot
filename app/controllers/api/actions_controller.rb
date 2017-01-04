@@ -26,7 +26,7 @@ class Api::ActionsController < Api::ApiController
             "#{user.tasks.count.ordinalize} to-do and earned #{task.bounty} " +
             "#{"point".pluralize(task.bounty)} for a total of " +
             "#{user.tasks.sum(:bounty)}:* 🎉\n#{task.description}"
-          send_message public_message
+          send_message public_message, SLACK_DONE_CHANNEL_ID
 
           confirmation_message = "✅ *Nice job! You finished this to-do " +
             "item:*\n#{task.description}"
