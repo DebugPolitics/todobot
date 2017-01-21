@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   has_and_belongs_to_many :tasks, join_table: :task_completions
+  has_and_belongs_to_many :categories
 
   validates :name, presence: true
   validates :slack_id, presence: true, uniqueness: true
@@ -9,6 +10,7 @@ class User < ApplicationRecord
     excluded_task_ids << exclude.id if exclude.present?
     candidate_tasks = Task.where(has_expired: false)
                           .where.not(id: excluded_task_ids)
+                          .where((categories & self.categories).length > 0)
     candidate_tasks.sample
   end
 
