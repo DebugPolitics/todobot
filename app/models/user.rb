@@ -8,9 +8,19 @@ class User < ApplicationRecord
   def get_random_task(exclude: nil)
     excluded_task_ids = completed_tasks.pluck(:id)
     excluded_task_ids << exclude.id if exclude.present?
-    candidate_tasks = Task.where(has_expired: false)
-                          .where.not(id: excluded_task_ids)
-                          .where((categories & self.categories).length > 0)
+    # Skill selection:
+    # If the user has no skills listed, don't filter by skill
+    # Otherwise, sort by the length of (User.skills & Task.skills)
+    # using a left outer join to include tasks with no skills listed.
+    user_skills = self.categories
+    #if user_skills.length is 0
+      candidate_tasks = Task.where(has_expired: false)
+                            .where.not(id: excluded_task_ids)
+    #else
+      #candidate_tasks = Task.where(has_expired: false)
+      #                      .where.not(id: excluded_task_ids)
+      #                      .left_outer_joins()
+    #end
     candidate_tasks.sample
   end
 

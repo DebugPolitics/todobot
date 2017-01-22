@@ -6,8 +6,8 @@ class CreateCategories < ActiveRecord::Migration[5.0]
       t.timestamps
     end
 
-    create_join_table :task, :categories
+    create_join_table :categories, :tasks
 
-    create_join_table :user, :categories
+    create_join_table :categories, :users
   end
 end
