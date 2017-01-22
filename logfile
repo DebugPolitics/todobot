@@ -90,3 +90,4 @@ STATEMENT:  /d
 	/?
 	select * from categories_tasks
 	;
+FATAL:  database "debugbot-dev" does not exist
