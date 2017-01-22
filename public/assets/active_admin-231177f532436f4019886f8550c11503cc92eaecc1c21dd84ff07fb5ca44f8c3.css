@@ -670,7 +670,6 @@ form textarea {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   outline: none;
   padding: 8px 10px 7px;
-  display: table-row;
 }
 /* line 137, /Users/miguel/.rvm/gems/ruby-2.3.3@todobot/gems/activeadmin-1.0.0.pre4/app/assets/stylesheets/active_admin/_forms.scss */
 form input[type=text]:focus,

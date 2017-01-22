@@ -32,10 +32,6 @@ ActiveAdmin.register Task do
     end
   end
 
-  def category_list
-    task.categories.join(', ')
-  end
-
   index do
     id_column
     column :description
