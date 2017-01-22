@@ -35,6 +35,8 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "#when a user selects skills, get_random_task does return a task that specifies those skills" do
+    @other_task = Task.create description: "test2"
+    @other_task.categories << @category2
     @user.categories << @category1
     @user.categories << @category3
     @task.categories << @category2
