@@ -31,4 +31,22 @@ ActiveAdmin.register Task do
       end
     end
   end
+
+  def category_list
+    task.categories.join(', ')
+  end
+
+  index do
+    id_column
+    column :description
+    column :is_multi_use
+    column :has_expired
+    column :bounty
+    column :categories do |t|
+      t.categories.map do |c|
+        c.name
+      end.join(', ')
+    end
+    actions
+  end
 end
