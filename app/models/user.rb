@@ -13,13 +13,15 @@ class User < ApplicationRecord
     # Otherwise, sort by the length of (User.skills & Task.skills)
     # using a left outer join to include tasks with no skills listed.
     user_skills = self.categories
-    if user_skills.length is 0
+    if user_skills.length == 0
       candidate_tasks = Task.where(has_expired: false)
                             .where.not(id: excluded_task_ids)
     else
       candidate_tasks = Task.where(has_expired: false)
                            .where.not(id: excluded_task_ids)
-                           .left_outer_joins()
+                           .left_outer_joins(:categories)
+                            .where(id: user_skills)
+      print candidate_tasks.explain                              
     end
     candidate_tasks.sample
   end

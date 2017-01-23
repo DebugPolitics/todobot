@@ -31,7 +31,7 @@ class UserTest < ActiveSupport::TestCase
     @user.categories << @category1
     @task.categories << @category2
 
-    assert_empty @user.get_random_task
+    assert_nil @user.get_random_task
   end
 
   test "#when a user selects skills, get_random_task does return a task that specifies those skills" do
