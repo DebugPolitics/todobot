@@ -19,9 +19,8 @@ class User < ApplicationRecord
     else
       candidate_tasks = Task.where(has_expired: false)
                            .where.not(id: excluded_task_ids)
-                           .left_outer_joins(:categories)
-                            .where(id: user_skills)
-      print candidate_tasks.explain                              
+                           .left_outer_joins(:categories).where(categories: { id: self.categories })
+      print candidate_tasks.explain
     end
     candidate_tasks.sample
   end
