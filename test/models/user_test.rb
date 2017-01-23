@@ -47,6 +47,8 @@ class UserTest < ActiveSupport::TestCase
 
   test "#when a user selects skills, get_random_task returns tasks with no skills specified" do
     @user.categories << @category1
+    @other_task = Task.create description: "test2"
+    @other_task.categories << @category2
 
     assert_equal @task, @user.get_random_task
   end

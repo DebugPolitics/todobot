@@ -9,20 +9,36 @@ class User < ApplicationRecord
     excluded_task_ids = completed_tasks.pluck(:id)
     excluded_task_ids << exclude.id if exclude.present?
     # Skill selection:
-    # If the user has no skills listed, don't filter by skill
-    # Otherwise, sort by the length of (User.skills & Task.skills)
-    # using a left outer join to include tasks with no skills listed.
+    # If the user has no skills listed, fallback to the old filter.
+    # Otherwise, prefer tasks that are a match to the user's skill set
+    # then fall back to tasks with no skills listed.
     user_skills = self.categories
+    candidate_tasks = []
     if user_skills.length == 0
-      candidate_tasks = Task.where(has_expired: false)
-                            .where.not(id: excluded_task_ids)
+      get_random_task_no_categories(exclude: exclude)
     else
+      # tasks that have categories
+      category_task_ids = Task.joins(:categories).distinct.pluck(:id)
+      # tasks that match the user's categories
       candidate_tasks = Task.where(has_expired: false)
                            .where.not(id: excluded_task_ids)
                            .left_outer_joins(:categories)
                              .where(categories: { id: user_skills })
-      print candidate_tasks.explain
+      # tasks that don't have any categories
+      tasks_without_categories = Task.where(has_expired: false)
+                           .where.not(id: excluded_task_ids)
+                           .where.not(id: category_task_ids)
+      # prefer tasks that match, then fallback to tasks without categories
+      candidate_tasks.sample || tasks_without_categories.sample
     end
+
+  end
+
+  def get_random_task_no_categories(exclude: nil)
+    excluded_task_ids = completed_tasks.pluck(:id)
+    excluded_task_ids << exclude.id if exclude.present?
+    candidate_tasks = Task.where(has_expired: false)
+                          .where.not(id: excluded_task_ids)
     candidate_tasks.sample
   end
 
