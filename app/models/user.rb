@@ -20,12 +20,12 @@ class User < ApplicationRecord
       # tasks that have categories
       category_task_ids = Task.joins(:categories).distinct.pluck(:id)
       # tasks that match the user's categories
-      candidate_tasks = Task.where(has_expired: false)
+      candidate_tasks = Task.unexpired
                            .where.not(id: excluded_task_ids)
                            .left_outer_joins(:categories)
                              .where(categories: { id: user_skills })
       # tasks that don't have any categories
-      tasks_without_categories = Task.where(has_expired: false)
+      tasks_without_categories = Task.unexpired
                            .where.not(id: excluded_task_ids)
                            .where.not(id: category_task_ids)
       # prefer tasks that match, then fallback to tasks without categories
@@ -37,7 +37,7 @@ class User < ApplicationRecord
   def get_random_task_no_categories(exclude: nil)
     excluded_task_ids = completed_tasks.pluck(:id)
     excluded_task_ids << exclude.id if exclude.present?
-    candidate_tasks = Task.where(has_expired: false)
+    candidate_tasks = Task.unexpired
                           .where.not(id: excluded_task_ids)
     candidate_tasks.sample
   end

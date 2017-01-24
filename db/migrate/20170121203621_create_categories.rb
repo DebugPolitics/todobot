@@ -9,5 +9,7 @@ class CreateCategories < ActiveRecord::Migration[5.0]
     create_join_table :categories, :tasks
 
     create_join_table :categories, :users
+
+    add_index :category, :name, unique: false
   end
 end

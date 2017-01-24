@@ -39,9 +39,7 @@ ActiveAdmin.register Task do
     column :has_expired
     column :bounty
     column :categories do |t|
-      t.categories.map do |c|
-        c.name
-      end.join(', ')
+      t.categories.map { |c| c.name }.join(', ')
     end
     actions
   end
