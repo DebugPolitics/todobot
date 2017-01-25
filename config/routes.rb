@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   namespace :api do
     post "actions" => "actions#create"
     post "leaderboard" => "leaderboard#create"
+    resources :skills, only: [:create]
     resources :get_tasks, only: [:create]
     resources :oauth_tokens, only: [:index]
   end
