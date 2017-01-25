@@ -6,3 +6,8 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password')
+
+Category.create(name: 'Engineering')
+Category.create(name: 'Sales')
+Category.create(name: 'Copywriting')
+Category.create(name: 'Design')
