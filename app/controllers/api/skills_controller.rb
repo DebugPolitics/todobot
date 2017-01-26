@@ -18,30 +18,59 @@ class Api::SkillsController < Api::ApiController
     # as well as text indicating the above +,-,all,none
     # Also, mixing +- and bare numbers will result in the help text -
     # I figure it's too confusing to accept "1,2,+3"
-    addRemove = false
 
-    if params.key?(:text)
-      # Nil turns to a valid empty string
-      skillsList = String(params[:text]).split(/[,\s]+/)
-      skillsList.each do |skill|
-
+    begin
+      if params.key?(:text)
+        text=params[:text].strip
+        if text.casecmp?('none')
+          # with no skills set, user will match any task regardless of skills
+          user.categories.clear
+        elsif text.casecmp?('all')
+          # subtly different - sets the skills to all the ones currently defined
+          user.categories = Category.all
+        elsif text.casecmp?('help') || text == '?'
+          showHelp
+        else
+          # absolute (false) or relative (true) mode - never the twain shall mix
+          addRemove = text.start_with?('+','-')
+          # Nil turns to a valid empty string
+          skillsList = text.split(/[,\s]+/)
+          adds = []
+          removes = []
+          skillsList.each do |skill|
+            add = true
+            if addRemove
+              if not skill.start_with?('+','-')
+                raise Error("Can't mix addRemove and absolute mode")
+              else
+                add = skill.start_with?('+')
+                skill = skill[1..-1]
+              end
+            end
+            cat = (Category.find_by id: skill) ||
+              (Category.where('name like ?', skill + '%')) ||
+              raise Error("Unknown skill #{skill}")
+            if add
+              adds << cat
+            else
+              removes << cat
+            end
+          end
+          user.categories.transaction do
+            user.categories << adds
+            user.categories.delete(removes)
+          end
+        end
       end
-
+    rescue => exception
+      exception.message + "\n" + showHelp
     end
-
-  end
-
-  def categoryList
-    if @@categoryList is nil
-      @@categoryList = Category.all.map { |c| "#{c.id} - #{c.name}"}.join(", ")
-    end
-    @@categoryList
   end
 
   def showHelp
-    text = "Help for /skills:
+    "Help for /skills:
     Enter skills from the following list below separated by commas or spaces:
-    #{self.categoryList}
+    #{Category.categoryList}
     You can precede a skill with + or - to add or remove it from your skills.
     You can also use the reserved skills \"All\" and \"None\" which do what you
     would expect.
