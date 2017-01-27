@@ -69,7 +69,7 @@ class Api::SkillsController < Api::ApiController
 
   def showHelp
     "Help for /skills:
-    Enter skills from the following list below separated by commas or spaces:
+    Enter skills from the list below separated by commas or spaces:
     #{Category.categoryList}
     You can precede a skill with + or - to add or remove it from your skills.
     You can also use the reserved skills \"All\" and \"None\" which do what you
