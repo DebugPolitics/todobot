@@ -19,17 +19,20 @@ class Api::SkillsController < Api::ApiController
     # Also, mixing +- and bare numbers will result in the help text -
     # I figure it's too confusing to accept "1,2,+3"
 
+    text = ""
     begin
       if params.key?(:text)
         text=params[:text].strip
         if text.casecmp?('none')
           # with no skills set, user will match any task regardless of skills
           user.categories.clear
+          text="Cleared all your skills"
         elsif text.casecmp?('all')
           # subtly different - sets the skills to all the ones currently defined
           user.categories = Category.all
+          text="You've claimed #{Category.categoryList}"
         elsif text.casecmp?('help') || text == '?'
-          showHelp
+          text = showHelp
         else
           # absolute (false) or relative (true) mode - never the twain shall mix
           addRemove = text.start_with?('+','-')
@@ -41,15 +44,18 @@ class Api::SkillsController < Api::ApiController
             add = true
             if addRemove
               if not skill.start_with?('+','-')
-                raise Error("Can't mix addRemove and absolute mode")
+                raise "Can't mix addRemove and absolute mode"
               else
                 add = skill.start_with?('+')
                 skill = skill[1..-1]
               end
             end
             cat = (Category.find_by id: skill) ||
-              (Category.where('name like ?', skill + '%')) ||
-              raise Error("Unknown skill #{skill}")
+              (Category.where('name like ?', skill + '%'))
+
+            if cat == nil
+              raise "Unknown skill #{skill}"
+            end
             if add
               adds << cat
             else
@@ -60,11 +66,18 @@ class Api::SkillsController < Api::ApiController
             user.categories << adds
             user.categories.delete(removes)
           end
+          if user.categories.empty?
+            text = "You have claimed no skills"
+          else
+            text = "Your #{'skill'.pluralize(user.categories.size)} #{'is'.pluralize(user.categories.size)} #{user.skillList}"
+          end
         end
       end
     rescue => exception
-      exception.message + "\n" + showHelp
+      text = exception.message + "\n" + showHelp
     end
+    render json: { text: text },
+           status: :ok
   end
 
   def showHelp
