@@ -30,7 +30,7 @@ class Api::SkillsController < Api::ApiController
         elsif text.casecmp?('all')
           # subtly different - sets the skills to all the ones currently defined
           user.categories = Category.all
-          text="You've claimed #{Category.categoryList}"
+          text=skillList(user)
         elsif text.casecmp?('help') || text == '?'
           text = showHelp
         else
@@ -51,11 +51,12 @@ class Api::SkillsController < Api::ApiController
               end
             end
             cat = (Category.find_by id: skill) ||
-              (Category.where('name like ?', skill + '%'))
+              (Category.where('name like ?', skill + '%').first)
 
             if cat == nil
               raise "Unknown skill #{skill}"
             end
+
             if add
               adds << cat
             else
@@ -69,7 +70,7 @@ class Api::SkillsController < Api::ApiController
           if user.categories.empty?
             text = "You have claimed no skills"
           else
-            text = "Your #{'skill'.pluralize(user.categories.size)} #{'is'.pluralize(user.categories.size)} #{user.skillList}"
+            text = skillList(user)
           end
         end
       end
@@ -88,6 +89,10 @@ class Api::SkillsController < Api::ApiController
     You can also use the reserved skills \"All\" and \"None\" which do what you
     would expect.
     "
+  end
+
+  def skillList(user)
+    "Your #{'skill'.pluralize(user.categories.size)} #{'is'.pluralize(user.categories.size)} #{user.skillList}"
   end
 
 end
