@@ -20,7 +20,7 @@ class Api::SkillsController < Api::ApiController
     # I figure it's too confusing to accept "1,2,+3"
 
     text = ""
-    command = params[:command]
+    command = params.key?(:command) ? params[:command] : "/skills"
     begin
       if params.key?(:text)
         text=params[:text].strip
