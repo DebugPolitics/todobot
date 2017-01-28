@@ -20,6 +20,7 @@ class Api::SkillsController < Api::ApiController
     # I figure it's too confusing to accept "1,2,+3"
 
     text = ""
+    command = params[:command]
     begin
       if params.key?(:text)
         text=params[:text].strip
@@ -32,7 +33,7 @@ class Api::SkillsController < Api::ApiController
           user.categories = Category.all
           text=skillList(user)
         elsif text.casecmp?('help') || text == '?'
-          text = showHelp
+          text = showHelp(command: command)
         else
           # absolute (false) or relative (true) mode - never the twain shall mix
           addRemove = text.start_with?('+','-')
@@ -75,14 +76,14 @@ class Api::SkillsController < Api::ApiController
         end
       end
     rescue => exception
-      text = exception.message + "\n" + showHelp
+      text = exception.message + "\n" + showHelp(command: command)
     end
     render json: { text: text },
            status: :ok
   end
 
-  def showHelp
-    "Help for /skills:
+  def showHelp(command: "/skills")
+    "Help for #{command}:
     Enter skills from the list below separated by commas or spaces:
     #{Category.categoryList}
     You can precede a skill with + or - to add or remove it from your skills.
