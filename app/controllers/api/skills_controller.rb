@@ -31,7 +31,7 @@ class Api::SkillsController < Api::ApiController
         elsif text.casecmp?('all')
           # subtly different - sets the skills to all the ones currently defined
           user.categories = Category.all
-          text=skillList(user)
+          text=skill_list(user)
         elsif text.casecmp?('help') || text == '?'
           text = showHelp(command: command)
         else
@@ -71,7 +71,7 @@ class Api::SkillsController < Api::ApiController
           if user.categories.empty?
             text = "You have claimed no skills"
           else
-            text = skillList(user)
+            text = skill_list(user)
           end
         end
       end
@@ -92,8 +92,8 @@ class Api::SkillsController < Api::ApiController
     "
   end
 
-  def skillList(user)
-    "Your #{'skill'.pluralize(user.categories.size)} #{'is'.pluralize(user.categories.size)} #{user.skillList}"
+  def skill_list(user)
+    "Your #{'skill'.pluralize(user.categories.size)} #{'is'.pluralize(user.categories.size)} #{user.skill_list}"
   end
 
 end
