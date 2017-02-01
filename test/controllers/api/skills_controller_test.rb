@@ -14,7 +14,7 @@ class Api::SkillsControllerTest < ActionController::TestCase
       user_id: "abc123",
       user_name: "test",
       command: "/skills",
-      text: "cat1, cat2"
+      text: "Cat1, cat2"
     }
 
     assert_response :success
@@ -29,7 +29,7 @@ class Api::SkillsControllerTest < ActionController::TestCase
       user_id: "abc123",
       user_name: "test",
       command: "/skills",
-      text: "+cat1, +cat2, -cat3"
+      text: "+cat1, +Cat2, -cat3"
     }
 
     assert_response :success
@@ -44,7 +44,7 @@ class Api::SkillsControllerTest < ActionController::TestCase
       user_id: "abc123",
       user_name: "test",
       command: "/skills",
-      text: "+cat1, cat2, -cat3"
+      text: "+cat1, cat2, -Cat3"
     }
 
     assert_response :success
