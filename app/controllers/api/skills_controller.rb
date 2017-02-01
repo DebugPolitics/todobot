@@ -51,8 +51,7 @@ class Api::SkillsController < Api::ApiController
                 skill = skill[1..-1]
               end
             end
-            cat = (Category.find_by id: skill) ||
-              (Category.where('name like ?', skill + '%').first)
+            cat = (Category.where('tolower(name) like ?', skill.downcase + '%').first)
 
             if cat == nil
               raise "Unknown skill #{skill}"

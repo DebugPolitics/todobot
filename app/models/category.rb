@@ -6,7 +6,7 @@ class Category < ApplicationRecord
 
   def self.categoryList
     if @@categoryList == nil
-      @@categoryList = Category.all.map { |c| "#{c.id} - #{c.name}"}.join(", ")
+      @@categoryList = Category.all.map { |c| c.name }.join(", ")
     end
     @@categoryList
   end
