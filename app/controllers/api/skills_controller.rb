@@ -24,15 +24,15 @@ class Api::SkillsController < Api::ApiController
     begin
       if params.key?(:text)
         text=params[:text].strip
-        if text.casecmp?('none')
+        if text.casecmp('none') == 0
           # with no skills set, user will match any task regardless of skills
           user.categories.clear
           text="Cleared all your skills"
-        elsif text.casecmp?('all')
+        elsif text.casecmp('all') == 0
           # subtly different - sets the skills to all the ones currently defined
           user.categories = Category.all
           text=skill_list(user)
-        elsif text.casecmp?('help') || text == '?'
+        elsif text.casecmp('help') == 0 || text == '?'
           text = showHelp(command: command)
         else
           # absolute (false) or relative (true) mode - never the twain shall mix
