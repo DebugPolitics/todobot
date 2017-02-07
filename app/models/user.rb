@@ -45,4 +45,8 @@ class User < ApplicationRecord
   def completed_tasks
     self.tasks.where(is_multi_use: false)
   end
+
+  def skill_list
+    self.categories.map { |c| c.name }.join(', ')
+  end
 end
