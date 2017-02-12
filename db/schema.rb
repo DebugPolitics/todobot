@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170121203621) do
+ActiveRecord::Schema.define(version: 20170212060736) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,6 +50,8 @@ ActiveRecord::Schema.define(version: 20170121203621) do
     t.string   "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string   "menu_item"
+    t.index ["menu_item"], name: "index_categories_on_menu_item", unique: true, using: :btree
   end
 
   create_table "categories_tasks", id: false, force: :cascade do |t|
@@ -82,14 +84,41 @@ ActiveRecord::Schema.define(version: 20170121203621) do
     t.index ["is_multi_use"], name: "index_tasks_on_is_multi_use", using: :btree
   end
 
+  create_table "team_members", force: :cascade do |t|
+    t.integer  "team_id"
+    t.integer  "user_id"
+    t.boolean  "poc"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["team_id"], name: "index_team_members_on_team_id", using: :btree
+    t.index ["user_id"], name: "index_team_members_on_user_id", using: :btree
+  end
+
+  create_table "teams", force: :cascade do |t|
+    t.string   "team_name"
+    t.string   "slack_channel"
+    t.string   "batch"
+    t.text     "description"
+    t.string   "app_website"
+    t.string   "github_repo"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.index ["batch"], name: "index_teams_on_batch", using: :btree
+    t.index ["team_name"], name: "index_teams_on_team_name", unique: true, using: :btree
+  end
+
   create_table "users", force: :cascade do |t|
     t.string   "name",       null: false
     t.string   "slack_id",   null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string   "email"
+    t.string   "github"
     t.index ["slack_id"], name: "index_users_on_slack_id", unique: true, using: :btree
   end
 
   add_foreign_key "task_completions", "tasks", on_delete: :cascade
   add_foreign_key "task_completions", "users", on_delete: :cascade
+  add_foreign_key "team_members", "teams"
+  add_foreign_key "team_members", "users"
 end
