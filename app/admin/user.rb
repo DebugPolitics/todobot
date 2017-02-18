@@ -7,7 +7,9 @@ ActiveAdmin.register User do
   form do |f|
     f.semantic_errors
     f.inputs do
-      f.input :name
+      f.input :first_name
+      f.input :last_name
+      f.input :slack_name
       f.input :slack_id
       f.input :email, as: :email
       f.input :github, as: :url
@@ -22,7 +24,9 @@ ActiveAdmin.register User do
   show do
     attributes_table do
       row :id
-      row :name
+      row :first_name
+      row :last_name
+      row :slack_name
       row :slack_id
       row :email
       row :github
@@ -37,7 +41,9 @@ ActiveAdmin.register User do
 
   index do
     id_column
-    column :name
+    column :first_name
+    column :last_name
+    column :slack_name
     column :slack_id
     column :email
     column :categories do |t|
