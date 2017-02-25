@@ -27,8 +27,10 @@ ActiveAdmin.register User do
   end
 
   sidebar :teams do
-    resource.teams do |team|
-      team.name
+    if resource
+      resource.teams do |team|
+        team.name
+      end
     end
   end
 
