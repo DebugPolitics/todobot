@@ -1,7 +1,7 @@
 class CreateTeams < ActiveRecord::Migration[5.0]
   def change
     create_table :teams do |t|
-      t.string :team_name
+      t.string :name
       t.string :slack_channel
       t.string :batch
       t.text :description
@@ -10,7 +10,7 @@ class CreateTeams < ActiveRecord::Migration[5.0]
 
       t.timestamps
     end
-    add_index :teams, :team_name, unique: true
+    add_index :teams, :name, unique: true
     add_index :teams, :batch
   end
 end

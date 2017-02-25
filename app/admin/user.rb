@@ -1,6 +1,7 @@
 ActiveAdmin.register User do
   filter :categories
-  filter :teams, member_label: :team_name
+  filter :teams
+  filter :team_members, member_label: :point_of_contact
 
   permit_params :name, :slack_id, :email, :github, category_ids: [], team_ids: []
 
@@ -15,10 +16,20 @@ ActiveAdmin.register User do
       f.input :github, as: :url
       f.input :categories, as: :check_boxes, checked: Category.pluck(&:id)
       if Team.count > 0
-        f.input :teams, member_label: :team_name
+        f.inputs do
+          f.has_many :teams, new_record: false, allow_destroy: false do |team|
+            team.input
+          end
+        end
       end
     end
     f.actions
+  end
+
+  sidebar :teams do
+    resource.teams do |team|
+      team.name
+    end
   end
 
   show do
@@ -34,7 +45,7 @@ ActiveAdmin.register User do
         column('Categories', :name)
       end
       row :teams do |t|
-        t.teams.map { |team| team.team_name }.join(', ')
+        t.teams.map { |team| team.name }.join(', ')
       end
     end
   end
@@ -50,7 +61,7 @@ ActiveAdmin.register User do
       t.categories.map { |c| c.name }.join(', ')
     end
     column :teams do |t|
-      t.teams.map { |team| team.team_name }.join(', ')
+      t.teams.map { |team| team.name }.join(', ')
     end
     actions
   end
