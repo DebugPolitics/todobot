@@ -4,8 +4,6 @@ class User < ApplicationRecord
   has_many :teams, through: :team_members
   has_many :team_members
 
-  validates :slack_name, presence: true
-  validates :slack_id, presence: true, uniqueness: true
   validates :first_name, presence: true
   validates :last_name, presence: true
 

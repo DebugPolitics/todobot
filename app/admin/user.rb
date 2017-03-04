@@ -3,7 +3,7 @@ ActiveAdmin.register User do
   filter :teams
   filter :team_members, member_label: :point_of_contact
 
-  permit_params :name, :slack_id, :email, :github, category_ids: [], team_ids: []
+  permit_params :first_name, :last_name, :slack_name, :email, :github, category_ids: [], team_ids: []
 
   form do |f|
     f.semantic_errors
@@ -11,15 +11,12 @@ ActiveAdmin.register User do
       f.input :first_name
       f.input :last_name
       f.input :slack_name
-      f.input :slack_id
       f.input :email, as: :email
       f.input :github, as: :url
       f.input :categories, as: :check_boxes, checked: Category.pluck(&:id)
-      if Team.count > 0
+      if Team.exists?
         f.inputs do
-          f.has_many :teams, new_record: false, allow_destroy: false do |team|
-            team.input
-          end
+          f.input :teams
         end
       end
     end
@@ -27,7 +24,7 @@ ActiveAdmin.register User do
   end
 
   sidebar :teams do
-    if resource
+    if User.exists?
       resource.teams do |team|
         team.name
       end
